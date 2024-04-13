@@ -14,33 +14,6 @@ export default function Home({ navigation }) {
 
   console.log('user', user);
   const { colors } = useTheme();
-  const [welcomeVisible, setWelcomeVisible] = useState(true);
-
-  function welcome() {
-    return (
-      <Dialog visible={welcomeVisible}>
-        <Dialog.Title>Welcome</Dialog.Title>
-        <Dialog.Content>
-          <Text variant="bodyMedium">
-            Welcome to infinite focus, an app that will enable you to avoid doom scrolling and enjoy
-            the more important things in life
-          </Text>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button
-            mode="outlined"
-            onPress={() => {
-              setWelcomeVisible(false);
-              navigation.navigate('Preferences');
-            }}
-            style={styles.button}
-          >
-            Next
-          </Button>
-        </Dialog.Actions>
-      </Dialog>
-    );
-  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -48,16 +21,7 @@ export default function Home({ navigation }) {
       <Text style={{ color: colors.onSurface, margin: 10 }}>
         {user && `Hello, ${user.firstname}!`}
       </Text>
-      <Button mode="contained" onPress={() => navigation.navigate('Tasks')} style={styles.button}>
-        {' '}
-        Tasks
-      </Button>
-      <Portal>
-        {user &&
-          user.preferredTasks &&
-          Object.values(user.preferredTasks).every(value => value === false) &&
-          welcome()}
-      </Portal>
+
     </ScrollView>
   );
 }
