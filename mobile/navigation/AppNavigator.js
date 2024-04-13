@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSession } from '../context/SessionContext';
 import AuthNavigator from './AuthNavigator';
-// import TabNavigator from './TabNavigator';
+import TabNavigator from './TabNavigator';
+import DrawerNavigator from "./DrawerNavigator";
 
 const Stack = createStackNavigator();
 
@@ -11,14 +12,14 @@ const AppNavigator = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {
-            user ? (
-                // <Stack.Screen name="Tab" component={TabNavigator} />
-                null
-            ) : (
-                <Stack.Screen name="Auth" component={AuthNavigator} />
-            )
-        }
+        {user ? (
+            // User is signed in
+            <Stack.Screen name="Main" component={AuthNavigator} />
+        ) : (
+            // No user is signed in
+            <Stack.Screen name="Auth" component={DrawerNavigator} />
+            // <Stack.Screen name="Auth" component={DrawerNavigator} />
+        )}
     </Stack.Navigator>
   );
 };
