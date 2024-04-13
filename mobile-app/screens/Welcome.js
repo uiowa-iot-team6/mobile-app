@@ -3,7 +3,6 @@ import { Image, StyleSheet, ScrollView } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import logo from '../assets/logo.png'; // Adjust the path as necessary
-import { LinearGradient } from 'expo-linear-gradient';
 import { width, height } from '../config/DeviceDimensions';
 
 export default function Welcome({ navigation }) {
@@ -53,7 +52,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 8,
     backgroundColor: '#fb9c04', // Or any color that suits your theme
-    color: "#fff",
+    color: "#fffff"
   },
 
 });

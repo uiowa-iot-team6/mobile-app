@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import logo from '../assets/logo.png'; // Make sure to use your actual logo path
-import { LinearGradient } from 'expo-linear-gradient';
 import { width, height } from '../config/DeviceDimensions';
 // import TextField from '../components/TextField';
 import axios from 'axios';
@@ -57,10 +56,6 @@ export default function SignUp({ navigation }) {
   }
 
   return (
-    <LinearGradient
-      colors={['#00008B', '#ADD8E6', '#008000']} // Dark blue, light blue, green
-      style={styles.gradient}
-    >
       <View style={styles.container} testID="SignUp">
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>Create Account</Text>
@@ -132,7 +127,6 @@ export default function SignUp({ navigation }) {
           Already have an account? Sign In!
         </Button>
       </View>
-    </LinearGradient>
   );
 }
 

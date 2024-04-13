@@ -2,8 +2,9 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSession } from '../context/SessionContext';
 import AuthNavigator from './AuthNavigator';
-import TabNavigator from './TabNavigator';
-import DrawerNavigator from "./DrawerNavigator";
+// import HomeStack from "./HomeStack";
+// import TabNavigator from "./TabNavigator";
+
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,7 @@ const AppNavigator = () => {
             <Stack.Screen name="Main" component={AuthNavigator} />
         ) : (
             // No user is signed in
-            <Stack.Screen name="Auth" component={DrawerNavigator} />
+            <Stack.Screen name="Auth" component={AuthNavigator} />
             // <Stack.Screen name="Auth" component={DrawerNavigator} />
         )}
     </Stack.Navigator>

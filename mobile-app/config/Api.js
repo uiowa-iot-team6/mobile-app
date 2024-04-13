@@ -5,10 +5,7 @@ const expoConfig = Constants.expoConfig || {};
 
 console.log('packagerOpts:', expoConfig);
 
-const api =
-  expoConfig.extra && expoConfig.extra.dev
-    ? expoConfig.hostUri.split(`:`).shift().concat(`:3002`)
-    : `api.example.com`;
+const api = expoConfig.hostUri.split(`:`).shift().concat(`:3002`)
 
 console.log(api);
 

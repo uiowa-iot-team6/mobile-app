@@ -19,7 +19,7 @@ const theme = {
 
 export default function App() {
   return (
-      <PaperProvider theme={theme}>
+      <PaperProvider >
         <SessionProvider>
           <NavigationContainer>
             <AppNavigator />
