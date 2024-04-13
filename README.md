@@ -62,7 +62,11 @@ npm install
 yarn install
 ```
 
-#### Step 7: Start the Server
+#### Step 7: Set up env
+
+Contact me (Joslin) for env file with mongo db username and pwd
+
+#### Step 8: Start the Server
 
 Start the server:
 
