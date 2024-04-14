@@ -35,6 +35,13 @@ const TabNavigator = () => (
 
         return <MaterialIcons name={iconName} size={size} color={color} testID={testID} />;
       },
+      tabBarInactiveTintColor: 'gray', // Set inactive icon color
+      tabBarStyle: {
+        backgroundColor: 'transparent', // Make tab bar background transparent
+        position: 'absolute', // Positioning it absolute
+        borderTopWidth: 0, // Remove top border of the tab bar
+        elevation: 0, // Remove shadow on Android
+      }
     })}
   >
     <Tab.Screen name="HomeStack" component={HomeStack} options={{ headerShown: false }} />

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Image } from 'react-native';
+import { ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Button, Text, useTheme, Dialog, Portal } from 'react-native-paper';
 // import { LinearGradient } from 'expo-linear-gradient';
+import {width, height} from "../config/DeviceDimensions";
 import { useSession } from '../context/SessionContext';
-import logo from '../assets/logo.png'; // Ensure the path to your logo is correct
+import logo from '../assets/name.png';
+import BoxComponent from "../components/BoxComponent"; // Ensure the path to your logo is correct
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
-
+  const date = new Date();
   if (!user) {
     return null;
   }
@@ -17,11 +20,32 @@ export default function Home({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={logo} style={styles.logo} />
-      <Text style={{ color: colors.onSurface, margin: 10 }}>
-        {user && `Hello, ${user.firstname}!`}
-      </Text>
+      <View style={{justifyContent: "space-between",flexDirection: "row", marginTop: 50}}>
+          <Text style={{color: "#fff", fontWeight: "bold", marginLeft:-width*0.01, fontSize: 19 }}>Hi, {user.username}</Text>
+          <TouchableOpacity style={{marginLeft:width*0.2, marginTop: 1}}>
+              <SimpleLineIcons name="bell" size={30} color="white"/>
+          </TouchableOpacity>
+      </View>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.title}>{date.toDateString()}</Text>
+      <BoxComponent width={width*0.42} height={height*0.3}>
+        <View style={{flexDirection: "row"}}>
+          <SimpleLineIcons name="camera" size={40} color='#fb9c04' />
+          <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>Scan food</Text>
+        </View>
+      </BoxComponent>
 
+      <ScrollView horizontal>
+          <BoxComponent width={width * 0.4} height={height * 0.5} >
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Calories</Text>
+          </BoxComponent>
+          <BoxComponent width={width * 0.4} height={height * 0.5} >
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Macros</Text>
+          </BoxComponent>
+          <BoxComponent width={width * 0.4} height={height * 0.5} >
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>
+          </BoxComponent>
+        </ScrollView>
     </ScrollView>
   );
 }
@@ -32,20 +56,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#141723',
   },
   logo: {
     width: 200, // Adjust based on your logo's aspect ratio
     height: 100, // Adjust based on your logo's aspect ratio
     resizeMode: 'contain',
-    marginBottom: 40,
+    marginBottom: 10,
+      marginTop: -20
+
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 20,
-    textAlign: 'center',
+    marginLeft: -width * 0.22,
+    color: "white"
   },
   button: {
     marginTop: 10,
