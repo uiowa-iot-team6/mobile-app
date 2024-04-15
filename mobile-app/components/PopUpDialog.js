@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-import {ScrollView} from "react-native-gesture-handler";
-import GoalsContent from "./GoalsContent";
 
 const PopUpDialog = ({ visible, onClose, children }) => {
     if(!visible){
