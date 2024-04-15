@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import ImagePickerComponent from "./ImagePickerComponent";
 
 const Profile = () => {
     const [firstName, setFirstName] = useState('John');
@@ -10,27 +10,6 @@ const Profile = () => {
     const handleSaveChanges = () => {
         // Save changes to user profile
         console.log('Changes saved:', { firstName, lastName, profilePicture });
-    };
-
-    const handleChooseProfilePicture = () => {
-        const options = {
-            title: 'Select Profile Picture',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-
-        ImagePicker.showImagePicker(options, response => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                const source = { uri: response.uri };
-                setProfilePicture(source.uri);
-            }
-        });
     };
 
     return (
@@ -44,7 +23,10 @@ const Profile = () => {
                         <Text style={styles.profilePictureText}>Add Picture</Text>
                     </View>
                 )}
-                <Button title="Choose Profile Picture" onPress={handleChooseProfilePicture} />
+                {/* Use ImagePickerComponent to choose profile picture */}
+                <ImagePickerComponent
+                    setProfilePicture={setProfilePicture}
+                />
             </View>
 
             <View style={styles.profileInfo}>
@@ -74,7 +56,8 @@ const Profile = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 40,
+        paddingVertical: 0
     },
     profileHeader: {
         alignItems: 'center',
