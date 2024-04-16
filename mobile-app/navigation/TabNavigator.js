@@ -45,8 +45,18 @@ const TabNavigator = () => (
     })}
   >
     <Tab.Screen name="HomeStack" component={HomeStack} options={{ headerShown: false }} />
-    <Tab.Screen name="Stats" component={Stats} />
-    <Tab.Screen name="Plans" component={Plans} />
+    <Tab.Screen name="Stats" component={Stats} options={{
+      headerStyle: {  backgroundColor: 'rgba(35,40,61,0.96)',},
+      headerTitleStyle: {
+        color: "#fff",
+      } }
+    }/>
+    <Tab.Screen name="Plans" component={Plans} options={{
+      headerStyle: {  backgroundColor: 'rgba(35,40,61,0.96)',},
+      headerTitleStyle: {
+        color: "#fff",
+      } }
+    }/>
     <Tab.Screen name="More" component={More} options={{
       headerStyle: {  backgroundColor: 'rgba(35,40,61,0.96)',},
       headerTitleStyle: {

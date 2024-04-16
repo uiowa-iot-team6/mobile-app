@@ -3,7 +3,7 @@ import { View, Text,StyleSheet } from 'react-native';
 function Plans(props) {
     return (
         <View style={styles.container}>
-            <Text>This is a Plans screen</Text>
+            <Text>This is the history</Text>
         </View>
     );
 }
@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    
 });
 
 export default Plans;
