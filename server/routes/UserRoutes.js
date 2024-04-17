@@ -11,6 +11,7 @@ router.get('/get-all', async (req, res) => {
   const users = await UserModel.find({});
   return res.status(200).json({ users });
 });
+
 // Get user by username api
 router.get('/get-by-username', async (req, res) => {
   const { username } = req.query;
@@ -20,7 +21,21 @@ router.get('/get-by-username', async (req, res) => {
   }
   return res.status(200).json({ user });
 });
-
+router.put('/update-weight', async (req, res) => {
+  const { weight, date, username } = req.body;
+  // Find the user by userId
+  const user = await UserModel.findOne({username});
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  // Push new weight data to weightHistory array
+  user.weightHistory.push({ weight, date });
+  // Update the user's weightKg
+  user.weightKg = weight;
+  // Save the updated user
+  await user.save();
+  res.status(200).json({ message: 'Weight updated successfully', user });
+});
 //update goals
 router.put('/update-goals', async (req, res) => {
   const {username, weightGoal, carbsGoal, proteinGoal, fatGoal} = req.body;

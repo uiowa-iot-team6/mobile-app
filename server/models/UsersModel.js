@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+const WeightHistorySchema = new mongoose.Schema({
+  weight: { type: Number, required: true },
+  date: { type: Date, required: true }
+});
+
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
@@ -16,6 +21,7 @@ const UserSchema = new mongoose.Schema({
   fatGoal: { type: Number, required: false },
   weightGoal: { type: Number, required: false },
   profilePicture: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' },
+  weightHistory: [WeightHistorySchema]
 });
 
 export const UserModel = mongoose.model('users', UserSchema);

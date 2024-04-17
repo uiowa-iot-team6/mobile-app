@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import {ScrollView, StyleSheet, View, Image, TouchableOpacity, ScrollViewComponent} from 'react-native';
 import { Button, Text, useTheme, Dialog, Portal } from 'react-native-paper';
 // import { LinearGradient } from 'expo-linear-gradient';
 import {width, height} from "../config/DeviceDimensions";
@@ -7,9 +7,12 @@ import { useSession } from '../context/SessionContext';
 import logo from '../assets/name.png';
 import BoxComponent from "../components/BoxComponent"; // Ensure the path to your logo is correct
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import PopUpDialog from "../components/PopUpDialog";
+import ManualFoodEntry from "../components/ManualFoodEntry";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
+  const [entryVisible, setEntryVisible] = useState(false)
   const date = new Date();
   if (!user) {
     return null;
@@ -28,12 +31,21 @@ export default function Home({ navigation }) {
       </View>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>{date.toDateString()}</Text>
-      <BoxComponent width={width*0.42} height={height*0.3}>
-        <View style={{flexDirection: "row"}}>
-          <SimpleLineIcons name="camera" size={40} color='#fb9c04' />
-          <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>Scan food</Text>
-        </View>
-      </BoxComponent>
+    <ScrollView horizontal>
+        <BoxComponent width={width*0.42} height={height*0.3}>
+            <View style={{flexDirection: "row"}}>
+                <SimpleLineIcons name="camera" size={40} color='#fb9c04' />
+                <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>Scan food</Text>
+            </View>
+        </BoxComponent>
+        <BoxComponent width={width*0.42} height={height*0.3} onPres={()=>setEntryVisible(true)}>
+            <View style={{flexDirection: "row"}}>
+                <SimpleLineIcons name="note" size={40} color='#fb9c04' />
+                <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>Manual Entry</Text>
+            </View>
+        </BoxComponent>
+    </ScrollView>
+
 
       <ScrollView horizontal>
           <BoxComponent width={width * 0.4} height={height * 0.5} >
@@ -46,6 +58,9 @@ export default function Home({ navigation }) {
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>
           </BoxComponent>
         </ScrollView>
+        <PopUpDialog visible={entryVisible} >
+            <ManualFoodEntry onClose={()=>setEntryVisible(false)}/>
+        </PopUpDialog>
     </ScrollView>
   );
 }

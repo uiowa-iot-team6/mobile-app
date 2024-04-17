@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text,StyleSheet } from 'react-native';
 import {TouchableOpacity} from "react-native-gesture-handler";
-function BoxComponent({width,height, children}) {
+function BoxComponent({width,height, children, onPres}) {
     const styles = StyleSheet.create({
         container: {
             justifyContent: 'center',
@@ -16,7 +16,7 @@ function BoxComponent({width,height, children}) {
         },
     });
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={onPres}>
             {children}
         </TouchableOpacity>
     );
