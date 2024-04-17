@@ -26,7 +26,7 @@ const More = () => {
                     <SimpleLineIcons name="star" size={25} />
                     <Text style={styles.text}>Resting Metabolic Rate</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item} onPress={()=>setRmrVisible(true)}>
+                <TouchableOpacity style={styles.item} >
                     <SimpleLineIcons name="link" size={25} />
                     <Text style={styles.text}>Connect to tracker</Text>
                 </TouchableOpacity>

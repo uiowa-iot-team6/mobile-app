@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { authRouter } from './routes/AuthRoute.js';
 import { UserRouter } from './routes/UserRoutes.js';
-
+import {foodRouter} from './routes/foodRoutes.js'
 
 dotenv.config();
 const app = express();
@@ -13,7 +13,7 @@ app.use(cors());
 
 app.use('/auth', authRouter);
 app.use('/user', UserRouter);
-
+app.use('/food', foodRouter);
 const dbUri =
     'mongodb+srv://saanbe16:I5a6pS85VfNTRXHl@cluster0.87fmhhh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import {useSession} from "../context/SessionContext";
+import axios from "axios";
 
 const RMRCalculator = ({onClose}) => {
     const [weight, setWeight] = useState('');
@@ -7,8 +9,9 @@ const RMRCalculator = ({onClose}) => {
     const [age, setAge] = useState('');
     const [isMale, setIsMale] = useState(true);
     const [rmr, setRMR] = useState(null);
+    const { user, saveUser, logout } = useSession();
 
-    const calculateRMR = () => {
+    async function calculateRMR () {
         if (weight && height && age) {
             const weightKg = parseFloat(weight);
             const heightCm = parseFloat(height);
@@ -22,6 +25,11 @@ const RMRCalculator = ({onClose}) => {
             }
 
             setRMR(rmrResult.toFixed(2));
+            axios.put(`http://${api}/user/update-rmr`, {
+               username: user.username, rmr:  rmrResult.toFixed(2)
+            })
+            .then((r) =>console.log(r.data.message))
+            .catch((e)=>console.log("Error",e))
         } else {
             // Handle missing input
             setRMR(null);

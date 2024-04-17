@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {api} from "../config/Api";
+import {useSession} from "../context/SessionContext";
+import axios from "axios";
 
 const GoalsContent = ({onClose}) => {
     const [targetWeight, setTargetWeight] = useState('');
@@ -7,14 +10,18 @@ const GoalsContent = ({onClose}) => {
     const [carbsPercentage, setCarbsPercentage] = useState('');
     const [proteinPercentage, setProteinPercentage] = useState('');
     const [fatsPercentage, setFatsPercentage] = useState('');
-
+    const { user, saveUser, logout } = useSession();
+    console.log(user,"sadasd")
     const handleSetGoals = () => {
-        // Implement logic to handle setting goals
-        console.log('Target Weight:', targetWeight);
-        console.log('Goal Pace:', goalPace);
-        console.log('Carbs Percentage:', carbsPercentage);
-        console.log('Protein Percentage:', proteinPercentage);
-        console.log('Fats Percentage:', fatsPercentage);
+        axios.put(`http://${api}/user/update-goals`, {
+            username: user.username, weightGoal: targetWeight, carbsGoal: carbsPercentage, proteinGoal: proteinPercentage, fatGoal: fatsPercentage
+        })
+        .then(r=>{
+            console.log(r.data.message)
+        })
+        .catch(error => {
+            console.log('Error', error);
+        })
     };
 
     return (
