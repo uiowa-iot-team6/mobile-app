@@ -9,6 +9,7 @@ import BoxComponent from "../components/BoxComponent"; // Ensure the path to you
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import PopUpDialog from "../components/PopUpDialog";
 import ManualFoodEntry from "../components/ManualFoodEntry";
+import CalorieProgressComponent from "../components/CalorieProgressComponent";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
@@ -47,14 +48,21 @@ export default function Home({ navigation }) {
     </ScrollView>
 
 
-      <ScrollView horizontal>
-          <BoxComponent width={width * 0.4} height={height * 0.5} >
-              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Calories</Text>
+      <ScrollView horizontal style={{marginTop: -50}}>
+          <BoxComponent width={width * 0.4} height={height * 0.7} >
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10, alignSelf: "flex-start"}}>Calories</Text>
+              <CalorieProgressComponent
+                  totalCalories={2280}
+                  foodCalories={150}
+                  exerciseCalories={0}
+                  width={height}
+                  height={height}
+              />
           </BoxComponent>
-          <BoxComponent width={width * 0.4} height={height * 0.5} >
+          <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Macros</Text>
           </BoxComponent>
-          <BoxComponent width={width * 0.4} height={height * 0.5} >
+          <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>
           </BoxComponent>
         </ScrollView>
