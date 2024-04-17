@@ -9,7 +9,7 @@ if (!process.env.EXPO_PUBLIC_API_URL) {
   console.log("No API URL specified, defaulting to host URI.");
 }
 
-const api = !process.env.EXPO_PUBLIC_API_URL
+const api = process.env.EXPO_PUBLIC_API_URL
   ? process.env.EXPO_PUBLIC_API_URL.replace(/\/$/, "")
   : expoConfig.hostUri
       .split(`:`)
