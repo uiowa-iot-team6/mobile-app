@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View, Image, TouchableOpacity, ScrollViewComponent} from 'react-native';
 import { Button, Text, useTheme, Dialog, Portal } from 'react-native-paper';
 // import { LinearGradient } from 'expo-linear-gradient';
@@ -12,15 +12,70 @@ import ManualFoodEntry from "../components/ManualFoodEntry";
 import CalorieProgressComponent from "../components/CalorieProgressComponent";
 import MacrosComponent from "../components/MacrosComponent";
 import ImagePickerComponent from "../components/ImagePickerComponent";
+import axios from "axios";
+import {api} from "../config/Api";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
   const [entryVisible, setEntryVisible] = useState(false)
-  const [scanFoodVisible, setScanFoodVisible] = useState()
-  const date = new Date();
+  const [scanFoodVisible, setScanFoodVisible] = useState();
+  const [dailyFood, setDailyFood] = useState([]);
+    const [dailyCarbs, setDailyCarbs] = useState(0)
+    const [dailyFats, setDailyFats] = useState(0);
+    const [dailyProtein, setDailyProtein] = useState(0);
+    const [dailyCalories, setDailyCalories] = useState(0);
+    const date = new Date();
   if (!user) {
     return null;
   }
+  //calculate calories in array
+    function calculateCalories(food){
+        let totalCalories = 0;
+        let protein = 0;
+        let carbs = 0;
+        let fats = 0;
+        food.forEach(f => {
+            f.foodNutrients.forEach( nutrient =>{
+                if(nutrient.nutrientName==="Energy")
+                {
+                    totalCalories+=nutrient.value
+                }
+                if(nutrient.nutrientName==="Protein")
+                {
+                    protein+=nutrient.value
+                }
+                if(nutrient.nutrientName==="Carbohydrates")
+                {
+                    carbs+=nutrient.value
+                }
+                if(nutrient.nutrientName==="Total lipid (fat)")
+                {
+                    fats+=nutrient.value
+                }
+            })
+        })
+        setDailyCalories(totalCalories)
+        setDailyFats(fats)
+        setDailyCarbs(carbs)
+        setDailyProtein(protein)
+        console.log("calories",totalCalories,protein,carbs,fats)
+    }
+    useEffect(() => {
+        console.log("here")
+        axios.get(`http://${api}/food/get-by-username-today`, {params: {username: user.username}})
+            .then(r => {
+                if (r.data && r.data.food) {
+                    setDailyFood(r.data.food);
+                    calculateCalories(r.data.food);
+                } else {
+                    console.log("Food data is missing in the response:", r.data);
+                }
+            })
+            .catch(e => {
+                console.log("Error fetching food data:", e);
+            });
+    }, [entryVisible]);
+
 
   console.log('user', user);
   const { colors } = useTheme();
@@ -64,7 +119,7 @@ export default function Home({ navigation }) {
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginBottom: 5}}>Calories</Text>
               <CalorieProgressComponent
                   totalCalories={2280}
-                  foodCalories={150}
+                  foodCalories={dailyCalories}
                   exerciseCalories={0}
                   width={height}
                   height={height}
@@ -72,7 +127,7 @@ export default function Home({ navigation }) {
           </BoxComponent>
           <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Macros</Text>
-              <MacrosComponent carbs={50} fats={20} protein={10} />
+              <MacrosComponent carbs={dailyCarbs} fats={dailyFats} protein={dailyProtein} />
           </BoxComponent>
           <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>
