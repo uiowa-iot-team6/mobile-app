@@ -52,7 +52,6 @@ export default function CalorieProgressComponent({ totalCalories, foodCalories, 
             <View style={styles.calorieDetails}>
                 <Text style={styles.calorieLabel}>Base Goal {totalCalories}</Text>
                 <Text style={styles.calorieLabel}>Food {foodCalories}</Text>
-                <Text style={styles.calorieLabel}>Exercise {exerciseCalories}</Text>
             </View>
         </View>
     );

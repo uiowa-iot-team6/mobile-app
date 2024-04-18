@@ -10,10 +10,13 @@ import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import PopUpDialog from "../components/PopUpDialog";
 import ManualFoodEntry from "../components/ManualFoodEntry";
 import CalorieProgressComponent from "../components/CalorieProgressComponent";
+import MacrosComponent from "../components/MacrosComponent";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
   const [entryVisible, setEntryVisible] = useState(false)
+  const [scanFoodVisible, setScanFoodVisible] = useState()
   const date = new Date();
   if (!user) {
     return null;
@@ -33,10 +36,18 @@ export default function Home({ navigation }) {
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>{date.toDateString()}</Text>
     <ScrollView horizontal>
-        <BoxComponent width={width*0.42} height={height*0.3}>
+        <BoxComponent width={width*0.42} height={height*0.3 } onPres={()=>setScanFoodVisible(true)}>
             <View style={{flexDirection: "row"}}>
                 <SimpleLineIcons name="camera" size={40} color='#fb9c04' />
-                <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>Scan food</Text>
+                <Text style={{margin: 10,fontSize:18, fontWeight: "bold", color: '#fff'}}>
+                    <Portal>
+                        {/* Render the ImagePickerComponent in a portal */}
+                        <Dialog visible={scanFoodVisible} onDismiss={() => setScanFoodVisible(false)}>
+                            <ImagePickerComponent username={user.username}/>
+                        </Dialog>
+                    </Portal>
+                    Scan Food
+                </Text>
             </View>
         </BoxComponent>
         <BoxComponent width={width*0.42} height={height*0.3} onPres={()=>setEntryVisible(true)}>
@@ -50,7 +61,7 @@ export default function Home({ navigation }) {
 
       <ScrollView horizontal style={{marginTop: -50}}>
           <BoxComponent width={width * 0.4} height={height * 0.7} >
-              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10, alignSelf: "flex-start"}}>Calories</Text>
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginBottom: 5}}>Calories</Text>
               <CalorieProgressComponent
                   totalCalories={2280}
                   foodCalories={150}
@@ -61,6 +72,7 @@ export default function Home({ navigation }) {
           </BoxComponent>
           <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Macros</Text>
+              <MacrosComponent carbs={50} fats={20} protein={10} />
           </BoxComponent>
           <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>

@@ -7,7 +7,7 @@ function Plans(props) {
     const {user} = useSession()
     const [food, setFood] = useState([]);
     useEffect(() => {
-        axios.get(`http://${api}/food/get-by-username`,
+        axios.get(`http://${api}/api/food/get-by-username`,
             {params: {username: user.username}})
             .then(response => {
                 setFood(response.data.food)

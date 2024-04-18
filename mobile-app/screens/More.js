@@ -8,12 +8,14 @@ import GoalsContent from "../components/GoalsContent";
 import RMRCalculator from "../components/RMRCalculator";
 import ChangePassword from "../components/ChangePassword";
 import Profile from "../components/Profile";
+import {useSession} from "../context/SessionContext";
 
 const More = () => {
     const [goalsVisible, setGoalsVisible] = useState(false)
     const [rmrVisible, setRmrVisible] = useState(false)
     const [changePwdVisible, setChangePwdVisible] = useState(false)
     const [profileVisible, setProfileVisible] = useState(false)
+    const {logout} = useSession()
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.section}>
@@ -41,7 +43,7 @@ const More = () => {
                     <SimpleLineIcons name="settings" size={25} />
                     <Text style={styles.text}>Change Password</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item}>
+                <TouchableOpacity style={styles.item} onPress={()=>logout()}>
                     <SimpleLineIcons name="logout" size={25} />
                     <Text style={styles.text}>Logout</Text>
                 </TouchableOpacity>

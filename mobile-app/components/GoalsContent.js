@@ -13,7 +13,7 @@ const GoalsContent = ({onClose}) => {
     const { user, saveUser, logout } = useSession();
     console.log(user,"sadasd")
     const handleSetGoals = () => {
-        axios.put(`http://${api}/user/update-goals`, {
+        axios.put(`http://${api}/api/user/update-goals`, {
             username: user.username, weightGoal: targetWeight, carbsGoal: carbsPercentage, proteinGoal: proteinPercentage, fatGoal: fatsPercentage
         })
         .then(r=>{

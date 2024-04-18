@@ -19,7 +19,7 @@ const ManualFoodEntry = ({onClose}) => {
             servingSizeUnit,
             servingsConsumed,api)
         try {
-            const response = await axios.post(`http://${api}/food/create-manually`, {
+            const response = await axios.post(`http://${api}/api/food/create-manually`, {
                 username: user.username,
                 description,
                 servingSize,

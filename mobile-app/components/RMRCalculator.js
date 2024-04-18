@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import {useSession} from "../context/SessionContext";
 import axios from "axios";
+import {api} from "../config/Api";
 
 const RMRCalculator = ({onClose}) => {
     const [weight, setWeight] = useState('');
@@ -25,7 +26,7 @@ const RMRCalculator = ({onClose}) => {
             }
 
             setRMR(rmrResult.toFixed(2));
-            axios.put(`http://${api}/user/update-rmr`, {
+            axios.put(`http://${api}/api/user/update-rmr`, {
                username: user.username, rmr:  rmrResult.toFixed(2)
             })
             .then((r) =>console.log(r.data.message))

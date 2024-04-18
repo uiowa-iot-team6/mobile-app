@@ -18,6 +18,7 @@ import {
 } from "react-native-paper";
 import axios from "axios";
 import { api } from "../config/Api";
+import { useSession } from '../context/SessionContext';
 
 const theme = {
     ...DefaultTheme,
@@ -31,10 +32,9 @@ const theme = {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function ImagePickerComponent({ setImageSet, setPhoto,parse,save }) {
+export default function ImagePickerComponent({username}) {
     const [image, setImage] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-
+    const [modalVisible, setModalVisible] = useState(true);
     const getCameraPermission = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -58,8 +58,7 @@ export default function ImagePickerComponent({ setImageSet, setPhoto,parse,save 
 
         if (!result.cancelled) {
             setImage(result.assets[0].uri);
-            setPhoto({ uri: result.assets[0].uri });
-            setImageSet(true);
+            console.log("Sadasd",image)
         }
     };
 
@@ -75,43 +74,50 @@ export default function ImagePickerComponent({ setImageSet, setPhoto,parse,save 
 
         if (!result.cancelled) {
             setImage(result.assets[0].uri);
-            setPhoto({ uri: result.assets[0].uri });
-            setImageSet(true);
         } else {
             console.log("cancelled");
         }
     };
 
     const submitImage = async () => {
+        if (!image) {
+            console.log("No image selected");
+            return;
+        }
+
         // Create a new FormData object
         let formData = new FormData();
 
         // Add the image to the form data
         let name = image.split("/");
         name = name[name.length - 1];
-        formData.append("image", {
+        formData.append("photo", {
             uri: image,
             name: name,
             type: "image/jpeg",
         });
 
-        // Send the image to your Node.js server
-        axios
-            .post("http://" + api + `/notes/read-note`, formData, {
+        // Add the mass to the form data
+        formData.append("mass", JSON.stringify(150)); // Example mass value, replace with actual value
+        formData.append("username", username); // Example mass value, replace with actual value
+
+        try {
+            // Send the image and mass to your Node.js server
+            const response = await axios.post("http://" + api + `/api/food/record`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-            })
-            .then((response) => {
-                console.log("DONE");
-                parse(response.data);
-            })
-            .catch((error) => {
-                console.log("Error: ", error);
             });
+
+            console.log("Response:", response.data);
+        } catch (error) {
+            console.log("Error: ", error);
+        }
 
         setModalVisible(false);
     };
+
+
     if(modalVisible) {
         return (
             <PaperProvider theme={theme}>
@@ -174,15 +180,7 @@ export default function ImagePickerComponent({ setImageSet, setPhoto,parse,save 
         );
     }
     else{
-        return (
-            <View style={styles.row}>
-                <TouchableOpacity title="Choose Profile Picture" onPress={()=>setModalVisible(true)}>
-                    <Text style={{color:'#0f53e3', fontSize: 15}}>
-                        Choose Profile Picture
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        )
+        return null
     }
 }
 
