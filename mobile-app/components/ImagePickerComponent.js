@@ -36,10 +36,11 @@ export default function ImagePickerComponent({username}) {
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(true);
     const getCameraPermission = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        const { status: cameraRollStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (status !== "granted") {
-            alert("Sorry, we need camera roll permissions to make this work!");
+        if (status !== "granted" || cameraRollStatus !== "granted") {
+            alert("Sorry, we need camera and camera roll permissions to make this work!");
             return false;
         }
         return true;
@@ -58,7 +59,6 @@ export default function ImagePickerComponent({username}) {
 
         if (!result.cancelled) {
             setImage(result.assets[0].uri);
-            console.log("Sadasd",image)
         }
     };
 
@@ -103,7 +103,7 @@ export default function ImagePickerComponent({username}) {
 
         try {
             // Send the image and mass to your Node.js server
-            const response = await axios.post("http://" + api + `/api/food/record`, formData, {
+            const response = await axios.post("http://" + api + `/food/record`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -159,10 +159,10 @@ export default function ImagePickerComponent({username}) {
                                 <Ionicons name="close-circle" size={32} color="black"/>
                             </TouchableOpacity>
 
-                            <Button mode="contained" style={styles.button} onPress={takePhoto}>
+                            <Button mode="contained" style={styles.button} onPress={()=>takePhoto().then(r=> console.log("Success")).catch(e=>console.log("Error",e))}>
                                 Take a photo
                             </Button>
-                            <Button mode="contained" style={styles.button} onPress={pickImage}>
+                            <Button mode="contained" style={styles.button} onPress={()=>pickImage().then(r=> console.log("Success")).catch(e=>console.log("Error",e))}>
                                 Pick an image
                             </Button>
                             {image && <Image source={{uri: image}} style={styles.image}/>}

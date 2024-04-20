@@ -24,7 +24,7 @@ export default function Login({ navigation }) {
       return;
     }
     await axios
-      .post(`http://${api}/api/auth/login`, {
+      .post(`http://${api}/auth/login`, {
         username: userName,
         password,
       })

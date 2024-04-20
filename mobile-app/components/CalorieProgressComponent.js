@@ -1,11 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 export default function CalorieProgressComponent({ totalCalories, foodCalories, exerciseCalories,width,height }) {
     const [remainingCalories,setRemainingCalories] = useState(totalCalories - foodCalories + exerciseCalories);
 
-    const [fill, setFill] = useState(((totalCalories - remainingCalories) / totalCalories) * 100);
+    const [fill, setFill] = useState(0);
+    useEffect(() => {
+        setFill(((totalCalories - remainingCalories) / totalCalories) * 1);
+    }, [foodCalories]);
+
     const styles = StyleSheet.create({
         container: {
             justifyContent: 'center',

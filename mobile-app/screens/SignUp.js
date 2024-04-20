@@ -38,7 +38,7 @@ export default function SignUp({ navigation }) {
       setError('');
       console.log(api);
       await axios
-        .post('http://' + api + `/api/auth/register`, {
+        .post('http://' + api + `/auth/register`, {
           firstname,
           lastname,
           username,
@@ -50,7 +50,10 @@ export default function SignUp({ navigation }) {
           navigation.navigate('Login');
         })
         .catch(err => {
-          console.log('Error', err);
+          console.log('Error', err.response.data.message);
+          if (err.response.data.message) {
+            setError(err.response.data.message);
+          }
         });
     }
   }

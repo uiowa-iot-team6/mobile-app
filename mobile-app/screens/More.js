@@ -9,13 +9,16 @@ import RMRCalculator from "../components/RMRCalculator";
 import ChangePassword from "../components/ChangePassword";
 import Profile from "../components/Profile";
 import {useSession} from "../context/SessionContext";
+import CodeInput from "../components/CodeInput";
 
 const More = () => {
     const [goalsVisible, setGoalsVisible] = useState(false)
     const [rmrVisible, setRmrVisible] = useState(false)
     const [changePwdVisible, setChangePwdVisible] = useState(false)
     const [profileVisible, setProfileVisible] = useState(false)
-    const {logout} = useSession()
+    const [dataVisible, setDataVisible] = useState(false)
+    const [connectVisible, setConnectVisible] = useState()
+    const {logout, user} = useSession()
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.section}>
@@ -28,9 +31,13 @@ const More = () => {
                     <SimpleLineIcons name="star" size={25} />
                     <Text style={styles.text}>Resting Metabolic Rate</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item} >
+                <TouchableOpacity style={styles.item} onPress={()=>setConnectVisible(true)}>
                     <SimpleLineIcons name="link" size={25} />
                     <Text style={styles.text}>Connect to tracker</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.item} onPress={()=>setDataVisible(true)} >
+                    <SimpleLineIcons name="share" size={25} />
+                    <Text style={styles.text}>Export data</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.section}>
@@ -62,6 +69,12 @@ const More = () => {
             <PopUpDialog visible={profileVisible}>
                 <Profile onClose={()=>setProfileVisible(false)}/>
             </PopUpDialog>
+            <PopUpDialog visible={connectVisible}>
+                <CodeInput onClose={()=>setConnectVisible(false)}/>
+            </PopUpDialog>
+        {/*<PopUpDialog visible={dataVisible}>*/}
+        {/*    <ShareDataComponent data={user}/>*/}
+        {/*</PopUpDialog>*/}
         </ScrollView>
     );
 };

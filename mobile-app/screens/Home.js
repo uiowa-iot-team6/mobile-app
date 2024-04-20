@@ -78,7 +78,6 @@ export default function Home({ navigation }) {
 
 
   console.log('user', user);
-  const { colors } = useTheme();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
