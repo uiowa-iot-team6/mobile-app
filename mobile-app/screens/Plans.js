@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { api } from '../config/Api';
 import { useSession } from '../context/SessionContext';
@@ -11,7 +11,13 @@ function Plans(props) {
     const [foods, setFoods] = useState([]);
     const [foodVisible, setFoodVisible] = useState(false)
     const [selectedFood, setSelectedFood] = useState(null)
+    const [refreshing, setRefreshing] = useState(false);
+
     useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
         axios
             .get(`http://${api}/food/get-by-username`, {
                 params: { username: user.username },
@@ -19,19 +25,23 @@ function Plans(props) {
             .then((response) => {
                 setFoods(response.data.food);
                 console.log(response.data.food);
+                setRefreshing(false); // Set refreshing to false when data is fetched
             })
             .catch((error) => {
                 console.error('Error fetching food:', error);
+                setRefreshing(false); // Set refreshing to false if an error occurs
             });
-    }, []);
-    function selectFood(item){
+    };
+
+    function selectFood(item) {
         console.log("SELECTING")
         setFoodVisible(true)
         setSelectedFood(item)
     }
+
     // Function to render each item in the FlatList
     const renderFoodItem = ({ item }) => (
-        <TouchableOpacity style={styles.foodItemContainer} onPress={()=>selectFood(item)}>
+        <TouchableOpacity style={styles.foodItemContainer} onPress={() => selectFood(item)}>
             <Text style={styles.foodDescription}>{item.description}</Text>
             <Text style={styles.servingInfo}>{item.servingsConsumed} servings</Text>
             <Text style={styles.dateInfo}>{formatDate(item.date)}</Text>
@@ -47,14 +57,24 @@ function Plans(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Food History</Text>
+
             <FlatList
                 data={foods}
                 renderItem={renderFoodItem}
                 keyExtractor={(item) => item._id}
                 style={styles.flatlist}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true); // Set refreshing to true when pull-to-refresh is triggered
+                            fetchData();
+                        }}
+                    />
+                }
             />
-            <PopUpDialog visible={foodVisible} >
-                <FoodItem food={selectedFood} onClose={()=>setFoodVisible(false)}/>
+            <PopUpDialog visible={foodVisible}>
+                <FoodItem food={selectedFood} onClose={() => setFoodVisible(false)} />
             </PopUpDialog>
         </View>
     );
@@ -77,7 +97,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
     },
-    flatlist:{
+    flatlist: {
         height: 200
     },
     foodDescription: {
@@ -94,5 +114,5 @@ const styles = StyleSheet.create({
         color: '#999',
     },
 });
-//661ab8bb0c1217d490fdea5e
+
 export default Plans;

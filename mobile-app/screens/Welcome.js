@@ -13,13 +13,13 @@ export default function Welcome({ navigation }) {
           style={styles.button}
           onPress={() => navigation.navigate('Login')}
         >
-          Login
+          <Text style={{color:"white", fontWeight: 'bold', fontSize: 15}}>Login</Text>
         </Button>
         <Button
           style={styles.button}
           onPress={() => navigation.navigate('SignUp')}
         >
-          Sign Up
+         <Text style={{color:"white", fontWeight: 'bold', fontSize: 15}}>Sign Up</Text>
         </Button>
       </ScrollView>
   );
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 8,
     backgroundColor: '#fb9c04', // Or any color that suits your theme
-    color: "#fffff"
+    color: '#fff'
   },
 
 });

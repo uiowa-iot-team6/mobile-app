@@ -32,7 +32,7 @@ const theme = {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function ImagePickerComponent({username}) {
+export default function ImagePickerComponent({username, updateFood}) {
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(true);
     const getCameraPermission = async () => {
@@ -108,8 +108,8 @@ export default function ImagePickerComponent({username}) {
                     "Content-Type": "multipart/form-data",
                 },
             });
+            updateFood()
 
-            console.log("Response:", response.data);
         } catch (error) {
             console.log("Error: ", error);
         }

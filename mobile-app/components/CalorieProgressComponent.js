@@ -3,13 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 export default function CalorieProgressComponent({ totalCalories, foodCalories, exerciseCalories,width,height }) {
-    const [remainingCalories,setRemainingCalories] = useState(totalCalories - foodCalories + exerciseCalories);
+    const remainingCalories = totalCalories - foodCalories + exerciseCalories;
+    const fillPercentage = (foodCalories / totalCalories) * 100;
 
-    const [fill, setFill] = useState(0);
-    useEffect(() => {
-        setFill(((totalCalories - remainingCalories) / totalCalories) * 1);
-    }, [foodCalories]);
-
+    console.log(totalCalories)
     const styles = StyleSheet.create({
         container: {
             justifyContent: 'center',
@@ -41,9 +38,12 @@ export default function CalorieProgressComponent({ totalCalories, foodCalories, 
     return (
         <View style={{ alignItems: 'center' }}>
             <AnimatedCircularProgress
+                backgroundWidth={5}
+
+                padding={10}
                 size={175}
                 width={15}
-                fill={fill}
+                fill={fillPercentage}
                 tintColor="#00e0ff"
                 backgroundColor="#3d5875"
             >

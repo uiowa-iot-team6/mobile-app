@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     paddingVertical: 8,
-    backgroundColor: '#fb9c04'
+    backgroundColor: '#fb9c04',
   },
   textButton: {
     marginTop: 15,

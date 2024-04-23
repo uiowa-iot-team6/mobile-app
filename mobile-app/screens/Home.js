@@ -17,6 +17,7 @@ import {api} from "../config/Api";
 
 export default function Home({ navigation }) {
   const { user } = useSession();
+    const [updatedUser, setUpdatedUser] = useState(user)
   const [entryVisible, setEntryVisible] = useState(false)
   const [scanFoodVisible, setScanFoodVisible] = useState();
   const [dailyFood, setDailyFood] = useState([]);
@@ -28,6 +29,14 @@ export default function Home({ navigation }) {
   if (!user) {
     return null;
   }
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            getFood().then(r => console.log("function called"))
+            getUser().then(r => console.log("function called"))
+        }, 5000); // Adjust the interval time as needed (e.g., 60000 milliseconds = 1 minute)
+
+        return () => clearInterval(intervalId);
+    }, []);
   //calculate calories in array
     function calculateCalories(food){
         let totalCalories = 0;
@@ -44,7 +53,7 @@ export default function Home({ navigation }) {
                 {
                     protein+=nutrient.value
                 }
-                if(nutrient.nutrientName==="Carbohydrates")
+                if(nutrient.nutrientName.includes("Carbohydrates") || nutrient.nutrientName.includes("Fiber") || nutrient.nutrientName.includes("Sugar") || nutrient.nutrientName.includes("Carb"))
                 {
                     carbs+=nutrient.value
                 }
@@ -58,14 +67,15 @@ export default function Home({ navigation }) {
         setDailyFats(fats)
         setDailyCarbs(carbs)
         setDailyProtein(protein)
-        console.log("calories",totalCalories,protein,carbs,fats)
+        console.log("calories",dailyCalories,protein,carbs,fats)
+        console.log("reel",totalCalories,protein,carbs,fats)
     }
-    useEffect(() => {
-        console.log("here")
-        axios.get(`http://${api}/food/get-by-username-today`, {params: {username: user.username}})
+    async function getFood() {
+        await axios.get(`http://${api}/food/get-by-username-today`, {params: {username: user.username}})
             .then(r => {
                 if (r.data && r.data.food) {
                     setDailyFood(r.data.food);
+                    console.log(r.data.food)
                     calculateCalories(r.data.food);
                 } else {
                     console.log("Food data is missing in the response:", r.data);
@@ -74,8 +84,22 @@ export default function Home({ navigation }) {
             .catch(e => {
                 console.log("Error fetching food data:", e);
             });
-    }, [entryVisible]);
-
+    }
+    async function getUser()
+    {
+        await axios.get(`http://${api}/user/get-by-username`, {params: {username: user.username}})
+            .then(r => {
+                if (r.data && r.data.user) {
+                    setUpdatedUser(r.data.user)
+                    return r.data.user
+                } else {
+                    console.log("User data is missing in the response:", r.data);
+                }
+            })
+            .catch(e => {
+                console.log("Error fetching user data:", e);
+            });
+    }
 
   console.log('user', user);
 
@@ -97,7 +121,7 @@ export default function Home({ navigation }) {
                     <Portal>
                         {/* Render the ImagePickerComponent in a portal */}
                         <Dialog visible={scanFoodVisible} onDismiss={() => setScanFoodVisible(false)}>
-                            <ImagePickerComponent username={user.username}/>
+                            <ImagePickerComponent updateFood={getFood} username={user.username}/>
                         </Dialog>
                     </Portal>
                     Scan Food
@@ -117,7 +141,7 @@ export default function Home({ navigation }) {
           <BoxComponent width={width * 0.4} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginBottom: 5}}>Calories</Text>
               <CalorieProgressComponent
-                  totalCalories={2280}
+                  totalCalories={updatedUser?.rmr}
                   foodCalories={dailyCalories}
                   exerciseCalories={0}
                   width={height}
@@ -126,10 +150,10 @@ export default function Home({ navigation }) {
           </BoxComponent>
           <BoxComponent width={width * 0.45} height={height * 0.7} >
               <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Macros</Text>
-              <MacrosComponent carbs={dailyCarbs} fats={dailyFats} protein={dailyProtein} />
-          </BoxComponent>
-          <BoxComponent width={width * 0.45} height={height * 0.7} >
-              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 18, marginTop: 10}}>Placeholder</Text>
+              <MacrosComponent carbs={dailyCarbs} fats={dailyFats} protein={dailyProtein}
+                               carbsGoal={updatedUser?.rmr* updatedUser?.carbsGoal/100}
+                               fatsGoal={updatedUser.rmr* updatedUser.fatGoal/100}
+                               proteinGoal={updatedUser.rmr* updatedUser.proteinGoal/100}/>
           </BoxComponent>
         </ScrollView>
         <PopUpDialog visible={entryVisible} >

@@ -26,10 +26,12 @@ const RMRCalculator = ({onClose}) => {
             }
 
             setRMR(rmrResult.toFixed(2));
-            axios.put(`http://${api}/api/user/update-rmr`, {
+            axios.put(`http://${api}/user/update-rmr`, {
                username: user.username, rmr:  rmrResult.toFixed(2)
             })
-            .then((r) =>console.log(r.data.message))
+            .then((r) => {
+                console.log("RMR calculated")
+            })
             .catch((e)=>console.log("Error",e))
         } else {
             // Handle missing input

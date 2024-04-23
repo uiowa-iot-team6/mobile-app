@@ -1,51 +1,66 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import {api} from "../config/Api";
-import {useSession} from "../context/SessionContext";
+import { api } from "../config/Api";
+import { useSession } from "../context/SessionContext";
 import axios from "axios";
 
-const GoalsContent = ({onClose}) => {
+const GoalsContent = ({ onClose }) => {
     const [targetWeight, setTargetWeight] = useState('');
     const [goalPace, setGoalPace] = useState('');
     const [carbsPercentage, setCarbsPercentage] = useState('');
     const [proteinPercentage, setProteinPercentage] = useState('');
     const [fatsPercentage, setFatsPercentage] = useState('');
     const { user, saveUser, logout } = useSession();
-    console.log(user,"sadasd")
+    console.log(user, "sadasd")
+
     const handleSetGoals = () => {
-        axios.put(`http://${api}/api/user/update-goals`, {
-            username: user.username, weightGoal: targetWeight, carbsGoal: carbsPercentage, proteinGoal: proteinPercentage, fatGoal: fatsPercentage
+        const totalPercentage = parseInt(carbsPercentage) + parseInt(proteinPercentage) + parseInt(fatsPercentage);
+        if (totalPercentage !== 100) {
+            alert('Percentages must add up to 100.');
+            return;
+        }
+
+        axios.put(`http://${api}/user/update-goals`, {
+            username: user.username,
+            weightGoal: targetWeight,
+            carbsGoal: carbsPercentage,
+            proteinGoal: proteinPercentage,
+            fatGoal: fatsPercentage
         })
-        .then(r=>{
-            console.log(r.data.message)
-        })
-        .catch(error => {
-            console.log('Error', error);
-        })
+            .then(r => {
+                console.log(r.data.message)
+                onClose()
+            })
+            .catch(error => {
+                console.log('Error', error);
+            })
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.goalTitle}>Set Your Goals</Text>
             <Text style={styles.goalDescription}>Achieving your goals requires setting targets. Fill in the following details to get started:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Target Weight (kg)"
-                keyboardType="numeric"
-                value={targetWeight}
-                onChangeText={setTargetWeight}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Goal Pace (kg/month)"
-                keyboardType="numeric"
-                value={goalPace}
-                onChangeText={setGoalPace}
-            />
+            {/*<TextInput*/}
+            {/*    style={styles.input}*/}
+            {/*    placeholder="Target Weight (kg)"*/}
+            {/*    placeholderTextColor="#ccc"*/}
+            {/*    keyboardType="numeric"*/}
+            {/*    value={targetWeight}*/}
+            {/*    onChangeText={setTargetWeight}*/}
+            {/*/>*/}
+            {/*<TextInput*/}
+            {/*    style={styles.input}*/}
+            {/*    placeholder="Goal Pace (kg/month)"*/}
+            {/*    keyboardType="numeric"*/}
+            {/*    placeholderTextColor="#ccc"*/}
+            {/*    value={goalPace}*/}
+            {/*    onChangeText={setGoalPace}*/}
+            {/*/>*/}
             <TextInput
                 style={styles.input}
                 placeholder="Carbs Percentage (%)"
                 keyboardType="numeric"
+                placeholderTextColor="#ccc"
                 value={carbsPercentage}
                 onChangeText={setCarbsPercentage}
             />
@@ -54,16 +69,18 @@ const GoalsContent = ({onClose}) => {
                 placeholder="Protein Percentage (%)"
                 keyboardType="numeric"
                 value={proteinPercentage}
+                placeholderTextColor="#ccc"
                 onChangeText={setProteinPercentage}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Fats Percentage (%)"
                 keyboardType="numeric"
+                placeholderTextColor="#ccc"
                 value={fatsPercentage}
                 onChangeText={setFatsPercentage}
             />
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity style={styles.setGoalButton} onPress={handleSetGoals}>
                     <Text style={styles.setGoalButtonText}>Set Your Goals</Text>
                 </TouchableOpacity>
@@ -104,6 +121,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 10,
+        marginLeft: 20
     },
     setGoalButtonText: {
         color: '#fff',

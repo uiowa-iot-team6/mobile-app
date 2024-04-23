@@ -23,7 +23,7 @@ const TabNavigator = () => (
           case 'Stats':
             iconName = 'auto-awesome';
             break;
-          case 'Plans':
+          case 'History':
             iconName ='my-library-books';
             break;
           case 'More': // Add a case for the Exercise screen
@@ -37,7 +37,7 @@ const TabNavigator = () => (
       },
       tabBarInactiveTintColor: 'gray', // Set inactive icon color
       tabBarStyle: {
-        backgroundColor: 'transparent', // Make tab bar background transparent
+        backgroundColor: '#141723', // Make tab bar background transparent
         position: 'absolute', // Positioning it absolute
         borderTopWidth: 0, // Remove top border of the tab bar
         elevation: 0, // Remove shadow on Android
@@ -45,7 +45,7 @@ const TabNavigator = () => (
     })}
   >
     <Tab.Screen name="HomeStack" component={HomeStack} options={{ headerShown: false }} />
-    <Tab.Screen name="Plans" component={Plans} options={{
+    <Tab.Screen name="History" component={Plans} options={{
       headerStyle: {  backgroundColor: 'rgba(35,40,61,0.96)',},
       headerTitleStyle: {
         color: "#fff",

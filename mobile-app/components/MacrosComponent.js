@@ -22,16 +22,13 @@ const MacroCircle = ({ macroName, consumed, goal }) => {
                     </Text>
                 )}
             />
-            <Text style={styles.macroLeft}>{goal - consumed}g left</Text>
+            <Text style={styles.macroLeft}>{Math.round(goal - consumed)}g left</Text>
         </View>
     );
 };
 
-function MacrosComponent({ carbs, fats, protein }) {
+function MacrosComponent({ carbs, fats, protein, carbsGoal, fatsGoal, proteinGoal  }) {
     // Your macro goals can be passed as props or can be fetched/stored in state.
-    const carbsGoal = 291; // Adjust as needed
-    const fatsGoal = 52; // Adjust as needed
-    const proteinGoal = 175; // Adjust as needed
 
     return (
         <View style={styles.macrosContainer}>
